@@ -13,3 +13,23 @@
 .book-card p {
     margin: 5px 0;
 }
+
+button {
+    background-color: green;
+    color: azure;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    
+}
+
+button:hover {
+    opacity: .8;
+    color: black;
+}
+
+::backdrop {
+    backdrop-filter: blur(3px);
+    background-color: rgba(0, 0, 0, 0.5);
+}
