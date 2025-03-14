@@ -32,6 +32,7 @@ function displayBooks() {
         // ajout carte pour chaque livre
         const bookCard = document.createElement('div');
         bookCard.classList.add('book-card');
+        bookCard.setAttribute('data-id', book.id);
         
         // ajout du titre
         const titleEl = document.createElement('h3');
@@ -53,8 +54,45 @@ function displayBooks() {
         statusEl.textContent = `Status: ${book.read}`;
         bookCard.appendChild(statusEl);
         
+        // ajout boutton supprimer
+        const deleteBookEl = document.createElement('button');
+        deleteBookEl.classList.add('deleteBtn');
+        deleteBookEl.setAttribute('data-id', book.id);
+        deleteBookEl.textContent = 'Delete';
+        bookCard.appendChild(deleteBookEl);
+
         bookContainer.appendChild(bookCard);
     }
+}
+
+function deleteBookFromLibrary(idToDel) {
+    const indexBookToDelete = myLibrary.findIndex(item => item.id === idToDel);
+    
+    if (indexBookToDelete !== -1) {
+        // Optionnel : afficher l'info du livre avant suppression
+        //alert(myLibrary[indexBookToDelete].info());
+        
+        // Supprimer le livre du tableau
+        myLibrary.splice(indexBookToDelete, 1);
+        
+        // Réafficher tous les livres pour mettre à jour le DOM
+        displayBooks();
+        
+        // Réattacher les écouteurs d'événements aux nouveaux boutons
+        setupDeleteButtons();
+    }
+}
+
+// Fonction séparée pour configurer les boutons de suppression
+function setupDeleteButtons() {
+    const deleteBookEl = document.querySelectorAll('.deleteBtn');
+    
+    deleteBookEl.forEach((button) => {
+        button.addEventListener("click", function() {
+            const idBookToDelete = this.dataset.id;
+            deleteBookFromLibrary(idBookToDelete);
+        });
+    });
 }
 
 function setupEventListeners() {
@@ -86,7 +124,13 @@ function setupEventListeners() {
         
         // Display books after adding a new one
         displayBooks();
+        
+        // Configurer les boutons de suppression après mise à jour
+        setupDeleteButtons();
     });
+
+    // Configurer les boutons de suppression au chargement initial
+    setupDeleteButtons();
 }
 
 // Initialize the page
